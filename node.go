@@ -7,10 +7,10 @@ import (
 )
 
 type Node struct {
-	key        string
-	value      string
-	leftChild  *Node
-	rightChild *Node
+	Key        string
+	Value      string
+	LeftChild  *Node
+	RightChild *Node
 }
 
 func AppendNodeToRootNode(node *Node) {
@@ -20,14 +20,14 @@ func AppendNodeToRootNode(node *Node) {
 
 	nodePointer := RootNode
 	for nodePointer != nil {
-		compareValue := strings.Compare(node.key, nodePointer.key)
+		compareValue := strings.Compare(node.Key, nodePointer.Key)
 
 		if compareValue == -1 {
-			if nodePointer.leftChild == nil {
-				nodePointer.leftChild = node
+			if nodePointer.LeftChild == nil {
+				nodePointer.LeftChild = node
 				return
 			}
-			nodePointer = nodePointer.leftChild
+			nodePointer = nodePointer.LeftChild
 		}
 
 		if compareValue == 0 {
@@ -36,11 +36,11 @@ func AppendNodeToRootNode(node *Node) {
 		}
 
 		if compareValue == 1 {
-			if nodePointer.rightChild == nil {
-				nodePointer.rightChild = node
+			if nodePointer.RightChild == nil {
+				nodePointer.RightChild = node
 				return
 			}
-			nodePointer = nodePointer.rightChild
+			nodePointer = nodePointer.RightChild
 		}
 	}
 }
@@ -52,18 +52,18 @@ func GetValueFromRootNodeKey(searchKey string) (string, error) {
 
 	nodePointer := RootNode
 	for nodePointer != nil {
-		compareValue := strings.Compare(searchKey, nodePointer.key)
+		compareValue := strings.Compare(searchKey, nodePointer.Key)
 
 		if compareValue == -1 {
-			nodePointer = RootNode.leftChild
+			nodePointer = RootNode.LeftChild
 		}
 
 		if compareValue == 0 {
-			return nodePointer.value, nil
+			return nodePointer.Value, nil
 		}
 
 		if compareValue == 1 {
-			nodePointer = RootNode.rightChild
+			nodePointer = RootNode.RightChild
 		}
 	}
 
@@ -79,55 +79,55 @@ func RemoveKeyFromRootNode(searchKey string) error {
 	var foundNodePointer *Node
 
 	for nodePointer != nil {
-		compareValue := strings.Compare(searchKey, nodePointer.key)
+		compareValue := strings.Compare(searchKey, nodePointer.Key)
 		fmt.Println(compareValue)
 
 		if compareValue == -1 {
-			nodePointer = nodePointer.leftChild
+			nodePointer = nodePointer.LeftChild
 		}
 
 		if compareValue == 0 {
 			foundNodePointer = nodePointer
 			// Case 1: the end of the tree
-			if nodePointer.leftChild == nil && nodePointer.rightChild == nil {
+			if nodePointer.LeftChild == nil && nodePointer.RightChild == nil {
 				foundNodePointer = nil
 				return nil
 			}
 			// Case 2: left child is not nil, but right is nil
-			if nodePointer.leftChild != nil && nodePointer.rightChild == nil {
-				foundNodePointer = nodePointer.leftChild
+			if nodePointer.LeftChild != nil && nodePointer.RightChild == nil {
+				foundNodePointer = nodePointer.LeftChild
 				return nil
 			}
 			// Case : right child is not nil, but left is nil
-			if nodePointer.leftChild == nil && nodePointer.rightChild != nil {
-				foundNodePointer = nodePointer.rightChild
+			if nodePointer.LeftChild == nil && nodePointer.RightChild != nil {
+				foundNodePointer = nodePointer.RightChild
 				return nil
 			}
 
-			if nodePointer.leftChild != nil && nodePointer.rightChild != nil {
+			if nodePointer.LeftChild != nil && nodePointer.RightChild != nil {
 				greatestChildParent := nodePointer
-				greatestChild := nodePointer.leftChild
+				greatestChild := nodePointer.LeftChild
 				// Now find the greatest value
-				for greatestChild.rightChild != nil {
+				for greatestChild.RightChild != nil {
 					greatestChildParent = greatestChild
-					greatestChild = greatestChild.rightChild
+					greatestChild = greatestChild.RightChild
 				}
 
-				if greatestChild.leftChild != nil {
-					greatestChildParent.rightChild = greatestChild.leftChild
+				if greatestChild.LeftChild != nil {
+					greatestChildParent.RightChild = greatestChild.LeftChild
 				} else {
-					greatestChildParent.rightChild = nil
+					greatestChildParent.RightChild = nil
 				}
 
-				foundNodePointer.key = greatestChild.key
-				foundNodePointer.value = greatestChild.value
+				foundNodePointer.Key = greatestChild.Key
+				foundNodePointer.Value = greatestChild.Value
 
 				return nil
 			}
 		}
 
 		if compareValue == 1 {
-			nodePointer = nodePointer.rightChild
+			nodePointer = nodePointer.RightChild
 		}
 	}
 
@@ -144,7 +144,7 @@ func printNode(node *Node) {
 		return
 	}
 
-	fmt.Printf("Key = %s, Value = %s\n", node.key, node.value)
-	printNode(node.leftChild)
-	printNode(node.rightChild)
+	fmt.Printf("Key = %s, Value = %s\n", node.Key, node.Value)
+	printNode(node.LeftChild)
+	printNode(node.RightChild)
 }
