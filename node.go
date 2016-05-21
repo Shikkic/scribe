@@ -79,7 +79,8 @@ func RemoveKeyFromRootNode(searchKey string) error {
 	var foundNodePointer *Node
 
 	for nodePointer != nil {
-		compareValue := strings.Compare(searchKey, RootNode.key)
+		compareValue := strings.Compare(searchKey, nodePointer.key)
+		fmt.Println(compareValue)
 
 		if compareValue == -1 {
 			nodePointer = nodePointer.leftChild
@@ -104,15 +105,24 @@ func RemoveKeyFromRootNode(searchKey string) error {
 			}
 
 			if nodePointer.leftChild != nil && nodePointer.rightChild != nil {
-				greatestChild := nodePointer
+				greatestChildParent := nodePointer
+				greatestChild := nodePointer.leftChild
 				// Now find the greatest value
 				for greatestChild.rightChild != nil {
+					greatestChildParent = greatestChild
 					greatestChild = greatestChild.rightChild
 				}
 
-				rightOfFoundNodePointer := foundNodePointer.rightChild
-				foundNodePointer = foundNodePointer.leftChild
-				greatestChild.rightChild = rightOfFoundNodePointer
+				if greatestChild.leftChild != nil {
+					greatestChildParent.rightChild = greatestChild.leftChild
+				} else {
+					greatestChildParent.rightChild = nil
+				}
+
+				foundNodePointer.key = greatestChild.key
+				foundNodePointer.value = greatestChild.value
+
+				return nil
 			}
 		}
 
